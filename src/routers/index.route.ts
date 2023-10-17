@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { userRoutes } from "./user.route";
-import { userCreateLoginroutes } from "./userLogin.router";
+import { sessionRoutes } from "./session.router";
 
 export const routes : Router = Router();
 
 routes.use("/users", userRoutes);
-routes.use("/login", userCreateLoginroutes);
+routes.use("/login", sessionRoutes);
