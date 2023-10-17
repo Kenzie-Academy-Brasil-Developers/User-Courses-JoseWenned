@@ -2,4 +2,4 @@ import { Router } from "express";
 
 export const userCreateLoginroutes : Router = Router();
 
-userCreateLoginroutes.use("/", );
+userCreateLoginroutes.post("/", );
