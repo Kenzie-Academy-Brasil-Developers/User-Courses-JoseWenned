@@ -1,5 +1,5 @@
 import { client } from "../database";
-import { userCreate, User, userResult } from "../interfaces/userCreate.interface";
+import { userCreate, User, userResult } from "../interfaces/user.interface";
 import format from "pg-format";
 import { hashSync } from "bcryptjs";
 import { userSchema } from "../schemas/user.schema";

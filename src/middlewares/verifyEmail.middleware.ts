@@ -1,6 +1,6 @@
 import { NextFunction } from "connect";
 import { Request, Response } from "express";
-import { userResult } from "../interfaces/userCreate.interface";
+import { userResult } from "../interfaces/user.interface";
 import { client } from "../database";
 import AppError from "../errors/App.error";
 
