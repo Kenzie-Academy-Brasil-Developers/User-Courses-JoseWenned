@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import { sessionService } from "../services/session.service";
-import { User, userResult } from "../interfaces/user.interface";
+import { loginService } from "../services/session.service";
+import { sessionReturn } from "../interfaces/session.interface";
 
-export const sessionController = async (req: Request, res: Response) : Promise<Response> => {
-    const user : userResult = await sessionService.(req.body);
+export const sessionLoginController = async (req: Request, res: Response): Promise<Response> => {
+   
+    const token : sessionReturn = await loginService(req.body);
 
-    return res.status(200).json();
+    return res.status(200).json(token);
+
 }

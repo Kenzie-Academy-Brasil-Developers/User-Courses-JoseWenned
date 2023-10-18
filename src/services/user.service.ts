@@ -1,5 +1,5 @@
 import { client } from "../database";
-import { userCreate, User, userResult } from "../interfaces/user.interface";
+import { userCreate, User, userResult, userRead } from "../interfaces/user.interface";
 import format from "pg-format";
 import { hashSync } from "bcryptjs";
 import { userSchema } from "../schemas/user.schema";
@@ -19,3 +19,11 @@ export const createUserService = async (data: userCreate): Promise<User> => {
 
     return userSchema.parse(user);
 };
+
+export const readUserService = async (): Promise<userRead> => {
+    
+    const queryResult : userResult = await client.query(`SELECT * FROM "users";`);
+
+    return queryResult.rows;
+
+}
