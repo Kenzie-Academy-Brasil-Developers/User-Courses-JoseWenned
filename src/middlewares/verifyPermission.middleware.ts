@@ -1,15 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 import AppError from "../errors/App.error";
+import { User } from "../interfaces/user.interface";
 
+export const verifyPermission = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 
-export const verifyPermission = async (req: Request, res: Response, next: NextFunction): void => {
+    // const {admin} = res.locals.decoded;
 
-    const {userId} = req.params;
-    const {sub, admin} = res.locals;
+    const user: User = req.body
 
-    if(admin) return next()
-
-    if(userId !== sub){
+    if(user.admin === false){
         throw new AppError("Insufficient permission", 403);
     };
 

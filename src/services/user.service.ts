@@ -1,10 +1,10 @@
 import { client } from "../database";
-import { userCreate, User, userResult, userRead } from "../interfaces/user.interface";
+import { UserCreate, User, UserResult, UserRead, UserCreateReturn } from "../interfaces/user.interface";
 import format from "pg-format";
 import { hashSync } from "bcryptjs";
-import { userSchema } from "../schemas/user.schema";
+import { userCreateReturnSchema, userReadSchema } from "../schemas/user.schema";
 
-export const createUserService = async (data: userCreate): Promise<User> => {
+export const createUserService = async (data: UserCreate): Promise<UserCreateReturn> => {
 
     data.password = hashSync(data.password, 10);
 
@@ -14,16 +14,16 @@ export const createUserService = async (data: userCreate): Promise<User> => {
         Object.values(data)
     )
 
-    const queryResult : userResult = await client.query(queryFormat);
+    const queryResult : UserResult = await client.query(queryFormat);
     const user : User = queryResult.rows[0]
 
-    return userSchema.parse(user);
+    return userCreateReturnSchema.parse(user);
 };
 
-export const readUserService = async (): Promise<userRead> => {
+export const readUserService = async (): Promise<UserRead> => {
     
-    const queryResult : userResult = await client.query(`SELECT * FROM "users";`);
+    const queryResult : UserResult = await client.query(`SELECT * FROM "users";`);
 
-    return queryResult.rows;
+    return userReadSchema.parse(queryResult.rows);
 
 }
