@@ -4,11 +4,9 @@ import { User } from "../interfaces/user.interface";
 
 export const verifyPermission = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
 
-    // const {admin} = res.locals.decoded;
+    const {admin} = res.locals.decoded
 
-    const user: User = req.body
-
-    if(user.admin === false){
+    if(!admin){
         throw new AppError("Insufficient permission", 403);
     };
 

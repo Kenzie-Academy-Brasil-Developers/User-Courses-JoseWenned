@@ -9,5 +9,7 @@ import { verifyPermission } from "../middlewares/verifyPermission.middleware";
 export const userRoutes : Router = Router();
 
 userRoutes.post("/", validateBody(userCreateSchema), verifyEmail, createUserController);
+
 userRoutes.get("/", verifyToken, verifyPermission, readUserController);
+
 userRoutes.get("/:id/courses",validateBody(userCreateSchema), verifyEmail);
