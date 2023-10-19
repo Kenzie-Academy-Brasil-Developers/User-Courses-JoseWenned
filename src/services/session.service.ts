@@ -1,12 +1,13 @@
 import { sign } from "jsonwebtoken";
 import { client } from "../database";
 import AppError from "../errors/App.error";
-import { session, sessionReturn } from "../interfaces/session.interface";
-import { User, userResult } from "../interfaces/user.interface";
+import { Session, SessionReturn } from "../interfaces/session.interface";
+import { User, UserResult } from "../interfaces/user.interface";
+import { compare } from "bcryptjs";
 
-export const loginService = async (data: session): Promise<sessionReturn> => {
+export const loginService = async (data: Session): Promise<SessionReturn> => {
 
-    const query : userResult = await client.query(
+    const query : UserResult = await client.query(
         `SELECT * FROM "users" WHERE "email" = $1;`,
         [data.email]
     );
@@ -17,7 +18,9 @@ export const loginService = async (data: session): Promise<sessionReturn> => {
 
     const user : User = query.rows[0];
 
-    if(user.password !== data.password){
+    const samePassword: boolean = await compare(data.password, user.password);
+
+    if(!samePassword){
         throw new AppError("Wrong email/password", 401);
     }
 

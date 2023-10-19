@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import AppError from "../errors/App.error";
 import { verify } from "jsonwebtoken";
 
-export const verifyToken = async (req: Request, res: Response, next: NextFunction): void => {
+export const verifyToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     
     const authorization : string | undefined = req.headers.authorization;
 

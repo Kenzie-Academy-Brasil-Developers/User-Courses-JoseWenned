@@ -1,10 +1,11 @@
 import { QueryResult } from "pg";
-import { userCreateSchema, userCreateUpdate, userSchema } from "../schemas/user.schema";
+import { userCreateReturnSchema, userCreateSchema, userCreateUpdate, userReadSchema, userSchema } from "../schemas/user.schema";
 export { z } from "zod";
 
 export type User = Zod.infer<typeof userSchema>;
 
-export type userCreate = Zod.infer<typeof userCreateSchema>;
-export type userRead = Array<User>;
-export type userCreateUpdate = Zod.infer<typeof userCreateUpdate>;
-export type userResult = QueryResult<User>;
+export type UserCreate = Zod.infer<typeof userCreateSchema>;
+export type UserCreateReturn = Zod.infer<typeof userCreateReturnSchema>
+export type UserRead = Zod.infer<typeof userReadSchema>;
+export type UserCreateUpdate = Zod.infer<typeof userCreateUpdate>;
+export type UserResult = QueryResult<User>;

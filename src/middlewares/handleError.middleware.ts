@@ -1,5 +1,6 @@
 import AppError from "../errors/App.error";
 import { NextFunction, Request, Response } from "express";
+import { JsonWebTokenError } from "jsonwebtoken";
 import { z } from "zod";
 
 export const handleErrors = (error: unknown, req: Request, res: Response, next:NextFunction ): Response => {
@@ -9,6 +10,10 @@ export const handleErrors = (error: unknown, req: Request, res: Response, next:N
 
     if(error instanceof z.ZodError){
         return res.status(400).json(error.flatten().fieldErrors)
+    };
+
+    if(error instanceof JsonWebTokenError){
+        return res.status(401).json({error: error.message})
     };
 
     console.log(error);
