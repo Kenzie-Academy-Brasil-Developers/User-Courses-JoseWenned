@@ -27,31 +27,27 @@ export const courseReadService = async () : Promise<CourseRead> => {
 };
 
 export const courseAddService = async (courseId: string, userId: string) => {
-    const queryString : string = `INSERT INTO "userCourse" ("userId", "courseId") VALUES ($1, $2);`
+    const queryString : string = `INSERT INTO "userCourses" ("userId", "courseId") VALUES ($1, $2);`
 
     await client.query(queryString, [courseId, userId]);
 }
 
-export const readUserCourseServise = async (userId: string) => {
+export const readUserCourseServise = async (courseId: string) => {
 
     const queryFormat: string = (
         `SELECT 
-        c.id "courseId"
-        c.name "courseName"
-        c.description "courseDescription"
-        uc.active "userActiveCourse"
-        u.id "userId"
-        u.name "userName"
-        FROM "courses" c
-        JOIN "userCourses" uc ON c.id = uc."courseId"
-        JOIN users u ON u.id = uc."userId" WHERE u.id = $1;`
+        "u"."id" AS "userId",
+        "u"."name" AS "userName",
+        "c"."id" AS "courseId",
+        "c"."name" AS "courseName",
+        "c"."description" AS "courseDescription",
+        "uc"."active" AS "userActiveInCourse"
+        FROM "users" AS "u"
+        JOIN "userCourses" AS "uc" ON "u"."id" = "uc"."userId"
+        JOIN "courses" AS "c" ON "c"."id" = "uc"."courseId" WHERE "c"."id" = $1;`
     )
 
-    const queryResult = await client.query(queryFormat, [userId]);
-
-    if(queryResult.rowCount === 0){
-        throw new AppError("No course found",404);
-    };
+    const queryResult = await client.query(queryFormat, [courseId]);
 
     return queryResult.rows;
 };

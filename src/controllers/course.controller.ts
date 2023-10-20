@@ -17,7 +17,7 @@ export const courseReadController = async (req: Request, res: Response): Promise
 
 export const courseReadIdController = async (req: Request, res: Response) : Promise<Response> => {
     
-    const userCourse = await readUserCourseServise(req.params.courseId);
+    const userCourse = await readUserCourseServise(req.params.id);
     
     return res.status(200).json(userCourse);
 };
@@ -29,15 +29,15 @@ export const courseAddController = async (req: Request, res: Response) : Promise
 
     await courseAddService(courseId, userId)
 
-    return res.status(201).json({"message": "User sucessfully vinculed to course"})
+    return res.status(201).json({"message": "User successfully vinculed to course"})
 }
 
-export const courseDeleteController = async (req: Request, res: Response) : Promise<Responde> => {
+export const courseDeleteController = async (req: Request, res: Response) : Promise<Response> => {
     
     const userId: string = req.params.userId;
     const courseId: string = req.params.courseId;
 
     await deleteCourseService(courseId, userId);
     
-    return res.status(204).json();
+    return res.status(204).send();
 }
