@@ -15,3 +15,4 @@ export const userCreateReturnSchema = userSchema.omit({password: true});
 export const userReadSchema = userCreateReturnSchema.array()
 
 export const userCreateUpdate = userCreateSchema.partial();
+
