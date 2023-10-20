@@ -6,5 +6,10 @@ export const courseSchema = z.object({
     description: z.string().nonempty()
 })
 
-export const courseCreateSchema = courseSchema.omit({id: true}).array().min(1);
+export const courseCreateSchema = courseSchema.omit({id: true});
 export const courseReadSchema = courseSchema.array();
+
+export const courseAddSchema = z.object({
+    userId: z.number().positive(),
+    courseId: z.number().positive()
+})

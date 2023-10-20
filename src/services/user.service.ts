@@ -27,3 +27,8 @@ export const readUserService = async (): Promise<UserRead> => {
     return userReadSchema.parse(queryResult.rows);
 
 }
+
+
+
+
+
