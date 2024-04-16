@@ -1,7 +1,6 @@
 import format from "pg-format";
 import { Course, CourseRead, CourseResult, CreateCourse } from "../interfaces/courses.interface";
 import { client } from "../database";
-import AppError from "../errors/App.error";
 
 export const courseCreateService = async (data: CreateCourse) : Promise<Course>=> {
 

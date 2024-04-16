@@ -1,0 +1,842 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "CRUD the users end courses.",
+        "description": "API that controls users and courses in which these users will be enrolled.",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000/api-documentation",
+            "description": "Develoepment env"
+        }
+    ],
+    "paths": {
+        "/users": {
+            "get": {
+                "description": "Router responsible for searching all users registered.",
+                "tags": ["Router without parameter"],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array"
+                                },
+                                "examples": {
+                                    "response": {
+                                        "value": [
+                                            {
+                                                "id": 1,
+                                                "name": "JoãO Pedro",
+                                                "email": "joaopedro@gmail.com",
+                                                "admin": true
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "Pedro Alves",
+                                                "email": "pedroalves@gmail.com",
+                                                "admin": false
+                                                
+                                            },
+                                            {
+                                                "id": 3,
+                                                "name": "Alana Nobre",
+                                                "email": "alananobre@gmail.com",
+                                                "admin": false
+                                                
+                                            },
+                                            {
+                                                "id": 3,
+                                                "name": "Pablo Ferreira",
+                                                "email": "pablo@gmail.com",
+                                                "admin": true
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing bearer token",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "BearerTokenError": {
+                                        "value": {
+                                            "message": "Missing bearer token."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Insufficient permission",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "InsufficientPermissionError": {
+                                        "value": {
+                                            "message": "Insufficient permission."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {"BearerAuth": []}
+                ]
+            },
+            "post": {
+                "description": "Router responsible for register users.",
+                "tags": ["Router without parameter"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type":"object",
+                                    "$ref": "#/components/schemas/ReadUser"
+                                },
+                                "examples": {
+                                    "product": {
+                                        "value": {
+                                            "id": 2,
+                                            "name": "Carlos Alves",
+                                            "email": "carlos@gmail.com",
+                                            "admin": true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "conflicBodyError": {
+                                        "value": {
+                                            "message": "Body invalid"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "conflictEmailError": {
+                                        "value": {
+                                            "message": "Email already registered"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }  
+                },
+                "security": [{}]
+            }
+        },
+        "/users/:id/courses": {
+            "get": {
+                "description": "Router responsible for searching all courses the user registered.",
+                "tags": ["Router with parameter"], 
+                "parameters": [{
+                    "schema": {
+                        "type": "number"
+                    },
+                    "in": "query",
+                    "description": "The Id user you want to search.",
+                    "name": "id"
+                }], 
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "$ref": "#components/schemas/ReadCourseUsers"
+                                },
+                                "examples": {
+                                    "response": {
+                                        "value": [
+                                            {
+                                                "courseId": 1,
+                                                "courseName": "Frontend",
+                                                "courseDescription": "HTML, CSS e JavaScript",
+                                                "userActiveInCourse": true,
+                                                "userId": 1,
+                                                "userName": "Ugo"
+                                            },
+                                            {
+                                                "courseId": 2,
+                                                "courseName": "React",
+                                                "courseDescription": "Biblioteca React para construção de frontend",
+                                                "userActiveInCourse": false,
+                                                "userId": 1,
+                                                "userName": "Ugo"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing bearer token",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "BearerTokenError": {
+                                        "value": {
+                                            "message": "Missing bearer token."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Insufficient permission",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "InsufficientPermissionError": {
+                                        "value": {
+                                            "message": "Insufficient permission."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "notFoundCourseError": {
+                                        "value": {
+                                            "message": "Not found course."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                },
+                "security": [
+                    {"BearerAuth": []}
+                ]                    
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Router responsible for login users.",
+                "tags": ["Router without parameter"],
+                "requestBody": {   
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#components/schemas/userLogin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Session",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type":"object",
+                                    "$ref": "#components/schemas/userLogin"
+                                },
+                                "examples": {
+                                    "product": {
+                                        "value": {
+                                            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "conflicBodyError": {
+                                        "value": {
+                                            "message":  "Body invalid"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "conflicEmailPasswordError": {
+                                        "value": {
+                                            "message":  "Wrong email/password"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{}]
+            }
+        },
+        "/courses": {
+            "get": {
+                "description": "Router responsible for searching all courses registered.",
+                "tags": ["Router without parameter"],
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array"
+                                },
+                                "examples": {
+                                    "response": {
+                                        "value": [
+                                            {
+                                                "id": 1,
+                                                "name": "Frontend",
+                                                "description": "HTML, CSS e JavaScript"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "React",
+                                                "description": "Frontend com a biblioteca React"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [{}]
+            },
+            "post":{
+                "description": "Router responsible for register courses.",
+                "tags": ["Router without parameter"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateCourse"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type":"object",
+                                    "$ref": "#/components/schemas/ReadCourse"
+                                },
+                                "examples": {
+                                    "product": {
+                                        "value": {
+                                            "id": 2,
+                                            "name": "React.js",
+                                            "description": "Development Front End"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "conflicBodyError": {
+                                        "value": {
+                                            "message": "Body invalid"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing bearer token",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "BearerTokenError": {
+                                        "value": {
+                                            "message": "Missing bearer token."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }, 
+                    "403": {
+                        "description": "Insufficient permission",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "InsufficientPermissionError": {
+                                        "value": {
+                                            "message": "Insufficient permission."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                },
+                "security": [
+                    {"BearerAuth": []}
+                ]
+            }
+        },
+        "/courses/:courseId/users/:userId": {
+            "post": {
+                "description": "Router responsible for register users in courses.",
+                "tags": ["Router with parameter"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateRegistrationUserinCourse"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type":"object",
+                                    "$ref": "#/components/schemas/ReadCourse"
+                                },
+                                "examples": {
+                                    "product": {
+                                        "value": {
+                                            "message": "User successfully vinculed to course"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "conflicBodyError": {
+                                        "value": {
+                                            "message": "Body invalid"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing bearer token",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "BearerTokenError": {
+                                        "value": {
+                                            "message": "Missing bearer token."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }, 
+                    "403": {
+                        "description": "Insufficient permission",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "InsufficientPermissionError": {
+                                        "value": {
+                                            "message": "Insufficient permission."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "notFoundUserCourseError": {
+                                        "value": {
+                                            "message": "User/course not found."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }     
+                },
+                "security": [
+                    {"BearerAuth": []}
+                ]
+            },
+            "delete": {
+                "description": "The router resposible delete just course and  information.",
+                "tags": ["Router with parameter"],
+                "parameters": [{
+                    "schema": {
+                        "type": "number"
+                    },
+                    "in": "query",
+                    "description": "The Id user/course you want to search.",
+                    "name": "id"
+                }],
+                "responses":{
+                    "204": {
+                        "description": "No body content"
+                    },
+                    "401": {
+                        "description": "Missing bearer token",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "BearerTokenError": {
+                                        "value": {
+                                            "message": "Missing bearer token."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Insufficient permission",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "InsufficientPermissionError": {
+                                        "value": {
+                                            "message": "Insufficient permission."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "notFoundUserCourseError": {
+                                        "value": {
+                                            "message": "User/course not found."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {"BearerAuth": []}
+                ]
+            }
+        },
+        "/courses/:id/users": {
+            "get": {
+                "description": "Router responsible for searching all users is course registered.",
+                "tags": ["Router with parameter"],     
+                "parameters": [{
+                    "schema": {
+                        "type": "number"
+                    },
+                    "in": "query",
+                    "description": "The Id course you want to search.",
+                    "name": "id"
+                }], 
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array"
+                                },
+                                "examples": {
+                                    "response": {
+                                        "value": [
+                                            {
+                                                "userId": 1,
+                                                "userName": "Ugo",
+                                                "courseId": 1,
+                                                "courseName": "Frontend",
+                                                "courseDescription": "HTML, CSS e JavaScript",
+                                                "userActiveInCourse": true
+                                            },
+                                            {
+                                                "userId": 2,
+                                                "userName": "Lucas",
+                                                "courseId": 1,
+                                                "courseName": "Frontend",
+                                                "courseDescription": "HTML, CSS e JavaScript",
+                                                "userActiveInCourse": true
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Missing bearer token",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "BearerTokenError": {
+                                        "value": {
+                                            "message": "Missing bearer token."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }, 
+                    "403": {
+                        "description": "Insufficient permission",
+                        "content": {
+                            "application/json": {
+                                "examples": {
+                                    "InsufficientPermissionError": {
+                                        "value": {
+                                            "message": "Insufficient permission."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                },
+                "security": [
+                    {"BearerAuth": []}
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreateUser": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "admin": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "ReadAllUser": {
+                "type": "array",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "admin": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "ReadUser": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "admin": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "userLogin": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ReadUserCourses": {
+                "type": "array",
+                "properties": {
+                    "courseId": {
+                        "type": "number"
+                    },
+                    "courseName": {
+                        "type": "string"
+                    },
+                    "courseDescription": {
+                        "type": "string"
+                    },
+                    "userActiveInCourse": {
+                        "type": "boolean"
+                    },
+                    "userId": {
+                        "type": "number"
+                    },
+                    "userName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateCourse": {
+                "type": "object",
+                "properties": {
+                   "name": {
+                        "type": "string"
+                   },
+                   "description": {
+                    "type": "string"
+                   }
+                }
+            },
+            "ReadAllCousers": {
+                "type": "array",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                   },
+                   "description": {
+                    "type": "string"
+                   }
+                }
+            },
+            "ReadCourse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "number"
+                    },
+                    "name": {
+                        "type": "string"
+                   },
+                   "description": {
+                    "type": "string"
+                   }
+                }
+            },
+            "CreateRegistrationUserinCourse": {
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "type": "number"
+                    },
+                    "courseId": {
+                        "type": "number"
+                    }
+                }
+            },
+            "ReadCourseUsers": {
+                "type": "array",
+                "properties": {
+                    "userId": {
+                        "type": "number"
+                    },
+                    "userName": {
+                        "type": "string"
+                    },
+                    "couserId": {
+                        "type": "number"
+                    },
+                    "courseName": {
+                        "type": "string"
+                    },
+                    "courseDescription": {
+                        "type": "string"
+                    },
+                    "userActiveInCourse": {
+                        "type": "boolean"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
+    
+
+
