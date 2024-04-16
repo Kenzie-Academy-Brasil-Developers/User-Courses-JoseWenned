@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.3",
     "info": {
-        "title": "CRUD the users end courses.",
+        "title": "CRUD the users and courses.",
         "description": "API that controls users and courses in which these users will be enrolled.",
         "version": "1.0.0"
     },
